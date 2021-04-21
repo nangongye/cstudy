@@ -1,0 +1,151 @@
+声明结构的形式：
+	struct point{
+	int x;
+	int y;
+	};
+	struct point p1,p2;
+
+
+	struct 结构名{
+	数据类型  变量1；
+	数据类型   变量2;
+	}；
+	struct 结构名  变量（这个变量包含结构里的变量）
+	p1和p2都是point的变量，里面有x和y的值
+	
+	又有:
+	struct{
+	int x;
+	int y;
+	}p1,p2;
+	上述p1和p2没有结构名，但都有x和y;	
+	也有
+	struct point{
+	int x;
+	int y;
+	}p1,p2;
+	p1和p2都是point里面有x和y的值
+1.在定义结构之后，花括号{}之后不要忘记分号
+2.和本地变量一样，在函数内部声明的结构变量只能在函数内部使用。
+3.所以通常在函数外部声明结构类型，这样就可以被多个函数所使用了。
+
+结构变量
+	初始化示例：
+	struct date{
+	int month;
+	int day;
+	int year;
+	}today;
+	
+	today.month = 06;
+	today.day  = 19;
+	today.year= 2005;
+也可这样赋值：代码和上述一致
+	struct date today = {07,31,1344}；这个相当于month=07,day=19,year=1344;
+不可以在结构体中直接赋值。如struct date{int x=2;};(vc6.0试验)
+
+结构成员
+1.结构和数组有点像；
+结构里面的成员，我们可以称为成员变量。 数组中的成员必须是相同类型的，而结构成员可以以是不同类型 的。
+数组用【】和下标访问其成员。例：a[0]=10；
+结构用.运算符和名字访问成员。例如：today.day
+				student.firstname
+
+结构运算
+1.要访问整个结构，直接用结构变量的名字
+2.对于整个结构，可以做赋值、取地址，也可以传递给函数参数。
+p1 = (struct point ){5,10};//相当于p1.x=5；p1=10;
+p1=p2；	相当于p1.x=p2.x；p1.y=p2.y;
+上述数组是不能这么运算的
+
+
+输入结构
+1.没有直接的方式可以scanf一个结构
+2.如果我们打算写一个函数来读入结构，但是问题来了，读入的结构如何送回来呢？c在函数调用时是传值的。
+	所以函数中的p与main中的y是不同的。
+	在函数读入了p的值之后，没有任何的值回到main，因为但是y的值还是0。
+
+	代码如下：
+	struct date{
+		int x;
+		int y;
+	};
+	void getstruct(struct date p){
+		scanf("%d",&p.x);
+		scanf("%d",&p.y);
+	} 
+	
+	void outputstruct(struct date p){
+		printf("%d%d\n",p.x,p.y);
+	}
+	
+	int main(){
+		struct date y={0,0};
+		gerstruct(struct date y)
+		output(struct date y);
+		return 0;
+	}
+上述代码运行都为0；
+
+解决方案
+1.之前的方案，把一个结构传入了函数，然后在函数中操作，但是没有返回回去，即没有return任何值回主函数。
+	问题在于传入函数的是外面那个结构的克隆体，而不是指针
+
+	传入结构和传入数组是不同的。
+2.在这个输入函数中，完全可以创建一个临时的结构变量，然后把这个结构返回给调用者。
+ 
+新的代码如下：
+	struct date{
+		int x;
+		int y;
+	};
+	struct date getstruct(struct date p){//返回一个struct类型的值
+		scanf("%d",&p.x);
+		scanf("%d",&p.y);
+		return p;
+	} 
+	
+	void outputstruct(struct date p){
+		printf("%d%d\n",p.x,p.y);
+	}
+	int main(){
+		struct date y={0,0};
+		y= getstruct(y);//其实y=getstruct（），不过要函数要无参数才得
+		output(y);
+		return 0;
+	}
+此时就可以输出scanf之后的值。
+
+结构指针作为参数
+结构变量本身不是地址。所以你需要用取地址符号取得结果变量地址。
+	代码：
+	struct date{
+		int month;
+		int day;
+		int year;
+	}myday;
+
+	struct date *p = &myday;
+	(*p).month = 12;*p指向myday ,这个语句的意思是指针所指的那个变量的那个成员
+	p->month = 12;p所指的那个结构的month，简单点就是p所指的month.
+
+	
+结构中的结构
+1.结构数组
+	结构也能做成一个数组。例如：struct date dates[100]//该语句表示名为date的结构里有
+	100个dates的变量，而每个变量又有结构成员。
+	struct date dates[]={{4,5,2005},{2,4,2005}};//这个是初始化结构数组，跟数组初始化一样。
+	即有两个变量dates里的成员被赋值，其余dates的成员都为0；
+	等价于：struct date dates[0]{
+				int x=4;
+				int y=5;
+				int z = 2005;		
+			}
+		struct date dates[1]{
+			int a = 2;
+			int b = 4;
+			int c = 2005;
+			}
+
+
+	

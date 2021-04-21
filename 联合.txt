@@ -1,0 +1,54 @@
+自定义数据类型（typedef）
+1.C语言提供了一个叫做typedef的功能来声明一个
+已有的数据类型的新名字。比如：
+	typedef  int Length;
+ 使得Length 成为int 类型的别名。那么这样，Length这个
+名字就可以代替int 出现在变量定义和参数声明的地方了:
+
+声明新的类型的名字
+	新的名字是某种类型的别名
+	改善了程序的可读性
+	typedef  long int64_t;//新的变量名字为int64_t
+	typedef  struct ADate{//重载已有的类型名字，新的名字的含义更清晰，具有可移植性
+		int month;
+		int day;
+		int year;
+		}Date;//简化了复杂名字，用typedef之后，新的名字就为:Date
+	
+	格式：typedef  数据类型   要换的数据类型的新名字
+	
+	typedef int Length;//Length就等价于int 类型
+	typedef  *char[10] String;//String是10个字符串的数组类型
+	
+	typedef  struct node{
+		int date;
+		struct node *next;
+	}aNode;
+
+	typedef struct node aNode;//aNode就可以代替struct node
+
+
+联合（和struct结构有点类似）
+	代码：
+		union AnElt{
+			int i;
+			char c;	
+		}elt1,elt2;
+		  elt1.i = 4;
+		  elt2.c = 'a';
+		elt2.i = 0xDEADBEEF;
+
+
+和结构的区别：
+1.结构的值是分开的，可以使用其中一个。即内存空间是分开。
+而联合是使用同一个内存空间。而那个空间是联合里成员变量占用最大内存的那一个。
+以上述代码为例，因为i是占用最大的内存的成员变量（十进制为3735928559），于是系统以他所占用内存的内存大小
+分配一个内存空间，union里的成员变量都共同使用这一个内存空间。
+sizeof (union ..) = sizeof (每个成员)的最大值。
+	
+总的来说：
+	所有的成员共享一个空间。//成员c可以在共享空间中存放数据，但是如果成员i中的数据过大，会覆盖c的值
+	同一时间只有一个成员是有效的。
+	union的大小是其最大的成员。
+	对第一个成员进行初始化。
+

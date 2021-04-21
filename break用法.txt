@@ -1,0 +1,12 @@
+break如果用于循环是用来终止循环
+break如果用于switch，则是用于终止switch
+break不能直接用于if，除非if属于循环内部的一个子句
+break只能终止距离它最近的那个循环
+	例如：
+		for（i=0; i<3; i++）
+		{
+		    for（j=1; j<4; j++）//只能终止这个循环
+		     {
+			break;
+		      }
+		}

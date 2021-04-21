@@ -1,0 +1,93 @@
+1.定义在函数外面的变量是全局变量。
+
+2.全局变量具有全局的生存期和作用域。
+	他们与任何函数无关
+	在任何函数内都可以使用它们
+
+全局变量初始化
+	没有做初始化的全局变量会得到0值
+	指针会得到NULL值
+
+	只能用编译时刻已知的值来初始化全局变量，即在写代码的时候就必须明确全局变量的值
+		
+	他们的初始化发生在main函数之前
+
+	如果函数内部存在于全局变量同名的变量，则全局变量被隐藏。
+
+		代码示例：
+	#include<stdio.h>
+
+	int gall = 12;//定义一个全局变量 
+	int f(void){
+		int gall = 1;
+		printf("in %s gall = %d\n",__func__,gall);//__func__是一个字符串，表示当前函数的名字 
+		gall = gall+2;
+		printf("agn in %s gall = %d\n",__func__,gall);
+		return gall;
+	}
+	int main(){
+		printf("in %s gall = %d\n",__func__,gall);
+		f();
+		printf("agn in %s gall = %d\n",__func__,gall);
+		return 0;
+	}
+	
+	则输出为 in main gall = 12
+		in f gall = 1
+		agn in f gall =3
+		agn in main gall =12
+可以知道f函数中的gall已经被隐藏了。
+
+静态本地变量
+	在本地变量定义时加上static修饰符就成为静态本地变量
+
+	当函数离开时候，静态本地变量会继续存在并保持其值
+	
+	静态本地变量的初始化只会在第一次进入这个函数时
+做，以后进入函数时会保持上次离开时的值。
+
+	代码示例：
+		#include<stdio.h>
+
+	int gall = 12;//定义一个全局变量 
+	int f(void){
+		static int all = 1;//定义一个静态本地变量
+		printf("in %s gall = %d\n",__func__,gall);//__func__是一个字符串，表示当前函数的名字 
+		gall = gall+2;
+		printf("again in %s gall = %d\n",__func__,gall);
+		return gall;
+	}
+	int main(){
+		//printf("in %s gall = %d\n",__func__,gall);
+		f();
+		f();
+		f();
+		return 0;
+	}
+	输出为
+		in f all = 1
+		again in f all = 3
+		in f all = 3
+		again in f all = 5
+		in f  all = 5
+		again in  f  all = 7
+
+
+	静态本地变量实际上是特殊的全局变量
+	即静态本地变量具有全局的生存期，函数内的局部作用域
+
+	它们位于相同的内存区域
+		
+	static在这里的意思是局部作用域(本地可访问)
+
+	
+后记
+	1.返回指针的函数
+		返回本地变量的地址是危险的
+		返回全局变量或静态本地变量的地址是安全的
+		返回在函数内malloc的内存是安全的，但容易造成问题
+		最好的做法是返回传入的指针
+
+2.不要使用全局变量来在函数间传递参数和结果
+3.尽量避免使用全局变量
+4.使用全局变量和静态本地变量的函数是线程不安全的

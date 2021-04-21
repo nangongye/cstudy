@@ -1,0 +1,15 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+   int main()
+    {
+ 	int *p = (int *)malloc(sizeof(int))；
+
+	1.使用malloc函数只有一个形参，且形参是一个整型
+	2.sizeof(int)表示请求系统为本程序分配一个int大小的字节.(即4个字节)
+	3.malloc函数只能返回第一个字节的地址
+	4.这个行数共占用8个字节（int *P占用4+malloc函数返回的第一个字节的地址（即第一个int的地址（即为4字节））=8）
+	5.p本身是静态内存，而它指向的是动态内存
+	
+	free（P）；//用完记得释放内存
+    }

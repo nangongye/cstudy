@@ -1,0 +1,72 @@
+格式化的输入输出
+	printf
+	    %[flags][width][.prec][hlL]type
+
+		flag	含义
+		-	左对齐
+		+	在前面放+或-//+号是强制输出一个加号，-号是负数前加一个-号
+		(space)	正数留空
+		0	0填充	
+
+		width或prec	含义
+		number		最小字符数//例如%9d，表数字宽度为9
+		*		下一个参数是字符数//例如%*d\n",6,123;6对应*，所以输出的时候宽度是6
+		.number		小数点后的位数////%9.2f，精度是2位数，宽度是9位数，小数点算一位
+		.*		下一个参数是小数点后的位数//与上述*号差不多，只不过是精度
+
+		类型修饰		含义
+		hh		单个字节,即8位二进制//hhd
+		h		short短整型//hd
+		l		long整形//ld   long int ==int 
+		ll		long long长整型//lld 
+		L		long double//Lf
+
+		type	用于		type	用于
+		i或者d	int 		g	 float
+		u	unsigned		G	float
+		o	八进制		a或者A	十六进制浮点
+		x	十六进制		c	char
+		X   字母大写的十六进制	s	字符串
+		f或F	float		p  	指针
+		e或者E	指数		n	读入/写出的个数()
+
+	
+	
+	scanf
+	   %[flag]type
+
+	flag	含义		flag 	含义
+	*	跳过		l	long，double
+	数字	最大字符数	ll	long long
+	hh	char		L	long double
+	h	short
+
+
+	type	用于		type	用于
+	d	int		s	字符串(单词)
+	i	整数，可能为十六	[...]	所允许的字符
+				p	指针	
+		进制或八进制
+	u	unsigned int 
+	o	八进制
+	x	十六进制
+	a,e,f,g	float
+	c	char	
+
+
+printf和scanf的返回值
+	读入的项目数
+	输出的字符数
+
+	在要求严格的程序中，应该判断每次调用scanf或printf的返回值，从而
+了解程序运行中是否存在问题  
+
+	代码实例
+		int num;
+		int i1 = scanf("%i",&num);//要求用户输入一个十进制的int类型的数,并将返回值返回给i1		
+		int i2  = printf("%d\n",num);
+		printf("%d:%d\n",i1,i2);
+
+		return 0;
+	假设是输入的是213；i1的值为1，i2的值为3
+
